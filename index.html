@@ -1,21 +1,97 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>
-    tittle
-  </title>
-  <link rel="stylesheet" href="index.css">
-  <script src="index.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GRID</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-  <header>
-    hell yeah
-  </header>
-
-
-
-  <p></p>
-
+    <div id="app">
+        <template v-for="element in grid">
+            <cell :elid="element[0]" :elcolor="element[1]"></cell>
+        </template>
+    </div>
 </body>
+<style>
+#app {
+    display: inline-grid;
+    grid-template-columns: repeat(30, 30px);
+    grid-gap: 0;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    /* transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg); */
+}
 
+/* #app:hover {
+    transform: none;
+} */
+
+.cell {
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    /* flex: 0 0 calc((100% / 18) - 10px);
+    height: calc((95vh /18 ) - 10px); */
+}
+
+
+.white {
+    background-color: white;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: greenyellow;
+}
+</style>
+<script>
+    var data = [];
+    var colors = ['white','blue','green']
+
+    for (let index = 1; index <= 900; index++) {
+        data.push([index, 0]);
+    }
+    
+    // Define a new component called cell
+    Vue.component('cell', {
+        props: {
+            elid: Number,
+            elcolor: Number,
+        },
+        template: `<div class="cell" :id="elid" :class="colorclass" @click="setcolor()"></div>`,
+        computed: {
+            colorclass: function () {
+                return colors[this.elcolor]
+            }
+        },
+        methods: {
+            setcolor: function() {
+                return this.elcolor >= 2 ? this.elcolor = 0 : this.elcolor++
+            }
+        }
+    });
+
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            grid: data,
+            colors: colors
+        },
+        methods: {
+            updatecolor: function (cell,color) {
+                this.grid[cell][1] = color
+            }
+        }
+    })
+</script>
 </html>
